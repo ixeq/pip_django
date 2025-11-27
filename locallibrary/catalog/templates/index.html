@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Домашняя страница</title>{% endblock %}
+
+{% block content %}
+<h1>Local Library Home</h1>
+
+  <p>Welcome to <em>LocalLibrary</em>, a very basic Django website developed as a tutorial example on the Mozilla Developer Network.</p>
+
+<h2>Dynamic content</h2>
+
+<form method="get">
+    <label for="search">Введите слово для поиска в названиях книг:</label>
+    <input type="text" id="search" name="search" 
+           value="{{ search }}" placeholder="например, Django">
+    <button type="submit">Найти</button>
+</form>
+
+  <p>The library has the following record counts:</p>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+    <li><strong>Copies:</strong> {{ num_instances }}</li>
+    <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
+    <li><strong>Authors:</strong> {{ num_authors }}</li>
+
+
+    {% if search %}
+    <li><strong>Книг с словом "{{ search }}" в названии:</strong> {{ num_books_with_word }}</li>
+    {% endif %}
+  </ul>
+
+{% endblock %}
