@@ -28,5 +28,9 @@
     <li><strong>Книг с словом "{{ search }}" в названии:</strong> {{ num_books_with_word }}</li>
     {% endif %}
   </ul>
+    <p>
+        You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{%
+        else %} times{% endif %}.
+    </p>
 
 {% endblock %}
