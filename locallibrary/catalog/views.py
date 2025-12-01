@@ -9,6 +9,8 @@ import datetime
 from .forms import RenewBookForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from .models import Author
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -112,3 +114,32 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+def author_list(request):
+    """Список авторов (функциональное представление)"""
+    author_list = Author.objects.all().order_by('last_name', 'first_name')
+    
+    # Пагинация
+    paginator = Paginator(author_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'author_list': page_obj.object_list,
+        'total_authors': author_list.count(),
+    }
+    return render(request, 'catalog/author_list.html', context)
+
+def author_detail(request, pk):
+    """Детальная информация об авторе"""
+    author = get_object_or_404(Author, pk=pk)
+    books = Book.objects.filter(author=author)
+    context = {'author': author}
+
+    context = {
+        'author': author,
+        'books': books,  # Добавляем книги в контекст
+        'book_count': books.count(),  # Количество книг автора
+    }        
+    return render(request, 'catalog/author_detail.html', context)
